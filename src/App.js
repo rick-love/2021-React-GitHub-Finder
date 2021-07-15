@@ -1,15 +1,56 @@
 import React, { Component } from 'react';
-import './assets/main.css';
 
+// Styles
+import './assets/main.css';
+import './App.css';
+
+// Components
+import Navbar from './components/layout/Navbar';
+import Users from './components/users/Users';
+import Search from './components/users/Search';
 
 class App extends Component {
-  render() {
-    function Welcome(props) {
-      return <h1>Designed by the {props.name.toUpperCase()}</h1>;
-    }
+  state = {
+    users: [],
+    loading: false,
+  };
 
-    const element = <Welcome name='Rick Love' />;
-    return <div className='App'>GitHub Finder {element} </div>;
+  // Initial Load
+  // async componentDidMount() {
+
+  //   this.setState({ loading: true });
+  //   const response = await fetch(
+  //     `https://api.github.com/users?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
+  //   );
+  //   const json = await response.json();
+  //   this.setState({ users: json, loading: false });
+  // }
+
+  // Search Github Users
+  searchUsers = async (text) => {
+    this.setState({ loading: true });
+    const response = await fetch(
+      `https://api.github.com/search/users?q=${text}&client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
+    );
+    const json = await response.json();
+    this.setState({ users: json.items, loading: false });
+  };
+
+  // Clear Users from State
+  clearUsers = () => {
+    this.setState({ users: [], loading: false })
+  }
+
+  render() {
+    return (
+      <div className='App'>
+        <Navbar />
+        <div className='container'>
+          <Search searchUsers={this.searchUsers} clearUsers={this.clearUsers} />
+          <Users loading={this.state.loading} users={this.state.users} />
+        </div>
+      </div>
+    );
   }
 }
 
