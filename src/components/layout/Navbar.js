@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom'
 // Style
 import { Wrapper, Content } from "./Navbar.styles";
 
@@ -11,6 +12,14 @@ const Navbar = ({ icon, title }) => {
         <i className={icon}></i>
         {title}
       </Content>
+      <ul>
+        <li>
+          <Link to='/'>Home</Link>
+        </li>
+        <li>
+          <Link to='/about'>About</Link>
+        </li>
+      </ul>
     </Wrapper>
   );
 };
